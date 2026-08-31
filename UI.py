@@ -1,5 +1,5 @@
 from tkinter import * 
-from map import displayMap
+from map import create_map
 
 
 def scan():
@@ -37,7 +37,7 @@ def scan():
         Label(RESULTS, text=AVIONS[i]["callsign"]).grid(row=i+2, column=1, padx=10, pady=10)
         Label(RESULTS, text=AVIONS[i]["geo_altitude"]).grid(row=i+2, column=2, padx=10, pady=10)
     
-    Button(MAIN,text="Afficher sur la Carte !", command=lambda: displayMap(LAT,LON,AVIONS)).grid(row=2, column=1)
+    Button(MAIN,text="Afficher sur la Carte !", command=lambda: create_map(LAT,LON,AVIONS)).grid(row=2, column=1)
 
 
 ## window declaration

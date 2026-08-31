@@ -3,7 +3,7 @@ import os
 import webbrowser
 
 
-def displayMap(LAT, LON, AVIONS):
+def create_map(LAT, LON, AVIONS):
 
     # -------------------------
     # Créer la carte Folium
@@ -21,7 +21,7 @@ def displayMap(LAT, LON, AVIONS):
 
     for avion in AVIONS:
 
-        heading = avion["true_track"] if avion["true_track"] is not "null" else 0
+        heading = avion["true_track"] if avion["true_track"] != "null" else 0
 
         folium.Marker(
             location=[
