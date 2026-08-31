@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_67995884bdc2b7c4c9d49b1b26e4d67e {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_67995884bdc2b7c4c9d49b1b26e4d67e" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_67995884bdc2b7c4c9d49b1b26e4d67e = L.map(
+                "map_67995884bdc2b7c4c9d49b1b26e4d67e",
+                {
+                    center: [46.20086979312309, 6.1496829986572275],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_609e378b2667977da5e93320c8b0cdd3 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_609e378b2667977da5e93320c8b0cdd3.addTo(map_67995884bdc2b7c4c9d49b1b26e4d67e);
+        
+    
+            var marker_6e1261a186f3c682c485e7905cc9ff9d = L.marker(
+                [46.2344, 6.1068],
+                {
+}
+            ).addTo(map_67995884bdc2b7c4c9d49b1b26e4d67e);
+        
+    
+            var div_icon_c7fbb6cbb01e2f05c9f5be4b7b8e2719 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    position: relative;\n                    width: 100px;\n                    height: 80px;\n                    transform: translate(-50%, -50%);\n                \"\u003e\n\n                    \u003c!-- Ic\u00f4ne de l\u0027avion --\u003e\n                    \u003cimg\n                        src=\"avion.png\"\n                        style=\"\n                            position: absolute;\n                            width: 50px;\n                            height: 50px;\n                            left: 20px;\n                            top: 15px;\n                            transform: rotate(177.19deg);\n                        \"\n                    \u003e\n\n                    \u003c!-- Callsign --\u003e\n                    \u003cdiv style=\"\n                        position: absolute;\n                        left: 50%;\n                        top: -10px;\n                        transform: translateX(-50%);\n\n                        font-family: Arial, sans-serif;\n                        font-size: 12px;\n                        font-weight: bold;\n\n                        color: black;\n                        background-color: white;\n\n                        padding: 2px 5px;\n                        border-radius: 3px;\n                        border: 1px solid #555;\n\n                        white-space: nowrap;\n\n                        box-shadow: 0px 1px 3px rgba(0,0,0,0.3);\n                    \"\u003e\n                        PGT43WU \n                    \u003c/div\u003e\n\n                \u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+            marker_6e1261a186f3c682c485e7905cc9ff9d.bindTooltip(
+                `<div>
+                     PGT43WU 
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6e1261a186f3c682c485e7905cc9ff9d.setIcon(div_icon_c7fbb6cbb01e2f05c9f5be4b7b8e2719);
+            
+</script>
+</html>

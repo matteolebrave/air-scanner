@@ -1,40 +1,29 @@
 from tkinter import * 
-from map import create_map
+from Map.map import create_map
+from Logic.main import start
+import json
 
 
 def scan():
-    LAT = latitude.get()
-    LON = longitude.get()
-    radius = rayon.get()
+    LAT = float(latitude.get())
+    LON = float(longitude.get())
+    RADIUS = float(rayon.get())
 
 
     print("Latitude :", LAT)
     print("Longitude :", LON)
-    print("Rayon :", radius)
+    print("Rayon :", RADIUS)
 
-    AVIONS = [{
-            "icao24": "4bc8e2",
-            "callsign": "PGT43WU ",
-            "origin_country": "Turkey",
-            "time_position": 1788175563,
-            "last_contact": 1788175563,
-            "longitude": 6.1068,
-            "latitude": 46.2344,
-            "baro_altitude": 0,
-            "on_ground": True,
-            "velocity": 4.37,
-            "true_track": 177.19,
-            "vertical_rate": 0,
-            "sensors": 0,
-            "geo_altitude": 0,
-            "squawk": "3215",
-            "spi": False,
-            "position_source": 0
-        }]
+    start(LAT,LON,RADIUS)
+    with open("apiResponse.json", "r", encoding="utf-8") as fichier:
+        AVIONS = json.load(fichier)
+
+    print(AVIONS)
+
     Label(RESULTS, text=f"{len(AVIONS)} aéronef{'s' if len(AVIONS)>1 else ''} détecté{'s' if len(AVIONS)>1 else ''}").grid(row=1, column=0, padx=10, pady=10)
     for i in range(len(AVIONS)):
         Label(RESULTS, text=AVIONS[i]["callsign"]).grid(row=i+2, column=0, padx=10, pady=10)
-        Label(RESULTS, text=AVIONS[i]["callsign"]).grid(row=i+2, column=1, padx=10, pady=10)
+        Label(RESULTS, text=AVIONS[i]["distance"]).grid(row=i+2, column=1, padx=10, pady=10)
         Label(RESULTS, text=AVIONS[i]["geo_altitude"]).grid(row=i+2, column=2, padx=10, pady=10)
     
     Button(MAIN,text="Afficher sur la Carte !", command=lambda: create_map(LAT,LON,AVIONS)).grid(row=2, column=1)
