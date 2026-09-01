@@ -1,0 +1,20 @@
+# Ignore everything
+*
+
+# Keep .gitignore itself
+!.gitignore
+
+# Keep directories
+!Logic/
+!Map/
+!templates/
+!static/
+
+# Keep everything inside them
+!Logic/**
+!Map/**
+!templates/**
+!static/**
+
+# Keep main.py
+!main.py
