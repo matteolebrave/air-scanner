@@ -4,6 +4,9 @@
 # Keep .gitignore itself
 !.gitignore
 
+# Keep README.md itself
+!README.md
+
 # Keep directories
 !Logic/
 !Map/
