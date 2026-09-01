@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Air Scanner</title>
+
+
+    <!-- =========================
+         LEAFLET
+         ========================= -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <!-- =========================
+         STYLE
+         ========================= -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            height: 100%;
+
+            font-family: Arial, sans-serif;
+
+            background: #111827;
+        }
+
+
+        /* =========================
+           APPLICATION
+           ========================= */
+
+        .app {
+
+            display: flex;
+
+            width: 100%;
+            height: 100vh;
+        }
+
+
+        /* =========================
+           PANNEAU GAUCHE
+           ========================= */
+
+        .sidebar {
+
+            width: 25%;
+            height: 100%;
+
+            background: #1f2937;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           PARAMÈTRES
+           ========================= */
+
+        .settings {
+
+            flex: 0 0 auto;
+
+            padding: 25px;
+
+            border-bottom: 1px solid #374151;
+        }
+
+
+        .title {
+
+            margin: 0 0 25px 0;
+
+            font-size: 28px;
+        }
+
+
+        .field {
+
+            margin-bottom: 15px;
+        }
+
+
+        .field label {
+
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-size: 13px;
+
+            color: #9ca3af;
+        }
+
+
+        .field input {
+
+            width: 100%;
+
+            padding: 10px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #374151;
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+
+        .field input:focus {
+
+            outline: 2px solid #2563eb;
+        }
+
+
+        /* =========================
+           BOUTON
+           ========================= */
+
+        .scan-button {
+
+            width: 100%;
+
+            margin-top: 5px;
+
+            padding: 12px;
+
+            border: none;
+            border-radius: 6px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .scan-button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        .scan-button:active {
+
+            background: #1e40af;
+        }
+
+
+        /* =========================
+           LISTE DES AVIONS
+           ========================= */
+
+        .aircraft-panel {
+
+            flex: 1;
+
+            padding: 20px;
+
+            overflow-y: auto;
+        }
+
+
+        .aircraft-title {
+
+            margin-top: 0;
+
+            margin-bottom: 15px;
+
+            font-size: 20px;
+        }
+
+
+        .aircraft-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .aircraft {
+
+            padding: 12px;
+
+            background: #374151;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            transition: background 0.15s;
+        }
+
+
+        .aircraft:hover {
+
+            background: #4b5563;
+        }
+
+
+        .aircraft-callsign {
+
+            font-weight: bold;
+
+            font-size: 15px;
+        }
+
+
+        .aircraft-info {
+
+            margin-top: 5px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            color: #d1d5db;
+        }
+
+
+        /* =========================
+           CARTE
+           ========================= */
+
+        .map-container {
+
+            width: 75%;
+            height: 100%;
+        }
+
+
+        #map {
+
+            width: 100%;
+            height: 100%;
+        }
+
+
+        /* =========================
+           ICÔNE AVION
+           ========================= */
+
+        .avion-icon {
+
+            background: transparent;
+
+            border: none;
+        }
+
+
+        .avion-icon img {
+
+            display: block;
+
+            width: 40px;
+            height: 40px;
+
+            transform-origin: center center;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- ==================================================
+         PANNEAU GAUCHE
+         ================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- ==================================================
+             PARAMÈTRES
+             ================================================== -->
+
+        <section class="settings">
+
+            <h1 class="title">
+                Air Scanner
+            </h1>
+
+
+            <!-- Latitude -->
+
+            <div class="field">
+
+                <label for="latitude">
+                    Latitude
+                </label>
+
+                <input
+                    id="latitude"
+                    type="number"
+                    step="any"
+                    placeholder="48.8566"
+                >
+
+            </div>
+
+
+            <!-- Longitude -->
+
+            <div class="field">
+
+                <label for="longitude">
+                    Longitude
+                </label>
+
+                <input
+                    id="longitude"
+                    type="number"
+                    step="any"
+                    placeholder="2.3522"
+                >
+
+            </div>
+
+
+            <!-- Radius -->
+
+            <div class="field">
+
+                <label for="radius">
+                    Radius (km)
+                </label>
+
+                <input
+                    id="radius"
+                    type="number"
+                    step="any"
+                    placeholder="100"
+                >
+
+            </div>
+
+
+            <!-- Bouton -->
+
+            <button
+                class="scan-button"
+                onclick="lancerScan()"
+            >
+                LANCER LE SCAN
+            </button>
+
+        </section>
+
+
+        <!-- ==================================================
+             LISTE DES AVIONS
+             ================================================== -->
+
+        <section class="aircraft-panel">
+
+            <h2 class="aircraft-title">
+                Avions
+            </h2>
+
+
+            <div
+                id="aircraft-list"
+                class="aircraft-list"
+            >
+
+                <div>
+                    Aucun avion chargé.
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </aside>
+
+
+    <!-- ==================================================
+         CARTE
+         ================================================== -->
+
+    <main class="map-container">
+
+        <div id="map"></div>
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+
+    // ======================================================
+    // INITIALISATION DE LA CARTE
+    // ======================================================
+
+    const map = L.map("map").setView(
+        [48.8566, 2.3522],
+        8
+    );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+
+    // Liste des marqueurs actuellement présents
+    let markers = [];
+
+
+
+    // ======================================================
+    // LANCER LE SCAN
+    // ======================================================
+
+    async function lancerScan() {
+
+
+        // Récupération des valeurs des champs
+
+        const latitude =
+            document.getElementById("latitude").value;
+
+        const longitude =
+            document.getElementById("longitude").value;
+
+        const radius =
+            document.getElementById("radius").value;
+
+
+        // Vérification simple
+
+        if (
+            latitude === "" ||
+            longitude === "" ||
+            radius === ""
+        ) {
+
+            alert("Veuillez remplir les trois champs.");
+
+            return;
+        }
+
+
+        // Désactive le bouton pendant le scan
+
+        const bouton =
+            document.querySelector(".scan-button");
+
+        bouton.disabled = true;
+
+        bouton.textContent = "SCAN EN COURS...";
+
+
+        try {
+
+
+            // ==================================================
+            // REQUÊTE VERS PYTHON
+            // ==================================================
+
+            const response = await fetch(
+
+                "/scan?" +
+
+                "latitude=" +
+                encodeURIComponent(latitude) +
+
+                "&longitude=" +
+                encodeURIComponent(longitude) +
+
+                "&radius=" +
+                encodeURIComponent(radius)
+
+            );
+
+
+            // Vérifie si Python a répondu correctement
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Erreur lors de la requête."
+                );
+
+            }
+
+
+            // Récupération du JSON
+
+            const data =
+                await response.json();
+
+
+            console.log("Réponse Python :", data);
+
+
+            // ==================================================
+            // AFFICHAGE
+            // ==================================================
+
+            afficherAvionsCarte(data.avions);
+
+            afficherListeAvions(data.avions);
+
+
+            // Centre la carte sur la zone demandée
+
+            map.setView(
+
+                [
+                    data.latitude,
+                    data.longitude
+                ],
+
+                8
+
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Une erreur est survenue pendant le scan."
+            );
+
+        }
+
+
+        // Réactive le bouton
+
+        bouton.disabled = false;
+
+        bouton.textContent = "LANCER LE SCAN";
+
+    }
+
+
+
+    // ======================================================
+    // AFFICHER LES AVIONS SUR LA CARTE
+    // ======================================================
+
+    function afficherAvionsCarte(avions) {
+
+
+        // --------------------------------------------------
+        // Suppression des anciens marqueurs
+        // --------------------------------------------------
+
+        markers.forEach(
+
+            marker => map.removeLayer(marker)
+
+        );
+
+        markers = [];
+
+
+        // --------------------------------------------------
+        // Création des nouveaux marqueurs
+        // --------------------------------------------------
+
+        avions.forEach(avion => {
+
+
+            // true_track fourni par OpenSky
+            //
+            // 0   = Nord
+            // 90  = Est
+            // 180 = Sud
+            // 270 = Ouest
+
+            const orientation =
+                avion["true_track"] ?? 0;
+
+
+            // Création de l'icône
+
+            const avionIcon = L.divIcon({
+
+                className: "avion-icon",
+
+                html: `
+                    <img
+                        src="/static/Avion.png"
+                        style="
+                            transform:
+                                rotate(${orientation}deg);
+                        "
+                    >
+                `,
+
+                iconSize: [40, 40],
+
+                iconAnchor: [20, 20]
+
+            });
+
+
+            // Création du marqueur
+
+            const marker = L.marker(
+
+                [
+                    avion["latitude"],
+                    avion["longitude"]
+                ],
+
+                {
+                    icon: avionIcon
+                }
+
+            ).addTo(map);
+
+
+            // --------------------------------------------------
+            // Popup
+            // --------------------------------------------------
+
+            marker.bindPopup(`
+
+                <strong>
+                    ${avion["callsign"] || "Inconnu"}
+                </strong>
+
+                <br><br>
+
+                Altitude :
+                ${avion["altitude"] ?? "N/A"}
+
+                <br>
+
+                Cap :
+                ${orientation}°
+
+                <br>
+
+                Latitude :
+                ${avion["latitude"]}
+
+                <br>
+
+                Longitude :
+                ${avion["longitude"]}
+
+            `);
+
+
+            // Ajoute le marqueur à notre tableau
+
+            markers.push(marker);
+
+        });
+
+    }
+
+
+
+    // ======================================================
+    // AFFICHER LA LISTE DES AVIONS
+    // ======================================================
+
+    function afficherListeAvions(avions) {
+
+
+        const liste =
+            document.getElementById("aircraft-list");
+
+
+        // Vide la liste
+
+        liste.innerHTML = "";
+
+
+        // Aucun avion
+
+        if (
+            !avions ||
+            avions.length === 0
+        ) {
+
+            liste.innerHTML = `
+                <div>
+                    Aucun avion trouvé.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // --------------------------------------------------
+        // Création d'un élément pour chaque avion
+        // --------------------------------------------------
+
+        avions.forEach((avion, index) => {
+
+
+            const element =
+                document.createElement("div");
+
+
+            element.className =
+                "aircraft";
+
+
+            const callsign =
+                avion["callsign"] || "Inconnu";
+
+
+            const altitude =
+                avion["altitude"] ?? "N/A";
+
+
+            const orientation =
+                avion["true_track"] ?? 0;
+
+
+            element.innerHTML = `
+
+                <div class="aircraft-callsign">
+
+                    ✈ ${callsign}
+
+                </div>
+
+                <div class="aircraft-info">
+
+                    Altitude :
+                    ${altitude}
+
+                    <br>
+
+                    Cap :
+                    ${orientation}°
+
+                    <br>
+
+                    Position :
+                    ${Number(avion["latitude"]).toFixed(4)},
+                    ${Number(avion["longitude"]).toFixed(4)}
+
+                </div>
+
+            `;
+
+
+            // --------------------------------------------------
+            // Clic sur un avion dans la liste
+            // --------------------------------------------------
+
+            element.onclick = function() {
+
+
+                const marker =
+                    markers[index];
+
+
+                if (!marker) {
+                    return;
+                }
+
+
+                // Centre la carte sur l'avion
+
+                map.setView(
+
+                    [
+                        avion["latitude"],
+                        avion["longitude"]
+                    ],
+
+                    10
+
+                );
+
+
+                // Ouvre le popup
+
+                marker.openPopup();
+
+            };
+
+
+            // Ajoute l'avion à la liste
+
+            liste.appendChild(element);
+
+        });
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>
