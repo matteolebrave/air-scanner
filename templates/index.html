@@ -533,7 +533,7 @@
 
             <button
                 class="scan-button"
-                onclick="lancerScan()"
+                onclick="demarrerActualisation()"
             >
                 LANCER LE SCAN
             </button>
@@ -792,7 +792,7 @@
     // LANCER LE SCAN
     // ======================================================
 
-    async function lancerScan() {
+    async function lancerScan(recentrer = true) {
 
 
         // Récupération des valeurs des champs
@@ -885,16 +885,19 @@
 
             // Centre la carte sur la zone demandée
 
-            map.setView(
+            // Centre la carte uniquement lors d'un scan manuel
 
-                [
-                    data.latitude,
-                    data.longitude
-                ],
+            if (recentrer) {
 
-                8
+                map.setView(
+                    [
+                        data.latitude,
+                        data.longitude
+                    ],
+                    8
+                );
 
-            );
+            }
 
 
         } catch (error) {
@@ -914,6 +917,33 @@
 
         bouton.textContent = "LANCER LE SCAN";
 
+    }
+
+    // Actualisation //
+
+    let scanTimeout = null;
+
+    async function demarrerActualisation() {
+
+        // On surrpime  une éventuelle actualisation précédente
+        if (scanTimeout !== null) {
+            clearTimeout(scanTimeout);
+        }
+
+        // Premier scan : on recentre la carte
+        await lancerScan(true);
+
+        async function actualiser() {
+
+            // Scan automatique : on ne bouge PAS la carte
+            await lancerScan(false);
+
+            // On attend 10 000 ms avant le prochain scan
+            scanTimeout = setTimeout(actualiser, 10000);
+        }
+
+        // Premier scan automatique dans 10 secondes
+        scanTimeout = setTimeout(actualiser, 10000);
     }
 
     // ======================================================
