@@ -286,15 +286,26 @@
         }
 
 
-        .avion-icon img {
-
-            display: block;
+        .avion-image {
 
             width: 40px;
             height: 40px;
 
+            background-color: black;
+
+            mask-image: url("/static/Avion.png");
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+
+            -webkit-mask-image: url("/static/Avion.png");
+            -webkit-mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+
             transform-origin: center center;
         }
+
 
     </style>
 
@@ -596,6 +607,29 @@
     // AFFICHER LES AVIONS SUR LA CARTE
     // ======================================================
 
+    function couleurSelonAltitude(altitude) {
+
+        const altitudeMin = 0;
+        const altitudeMax = 12000;
+
+        // Limite l'altitude entre 0 et 12000 m
+        const altitudeLimitee = Math.max(
+            altitudeMin,
+            Math.min(altitudeMax, altitude)
+        );
+
+        // Valeur entre 0 et 1
+        const ratio =
+            (altitudeLimitee - altitudeMin) /
+            (altitudeMax - altitudeMin);
+
+        // Rouge → Bleu
+        const rouge = Math.round(255 * (1 - ratio));
+        const bleu = Math.round(255 * ratio);
+
+        return `rgb(${rouge}, 0, ${bleu})`;
+    }
+
     function afficherAvionsCarte(avions) {
 
 
@@ -629,6 +663,25 @@
             const orientation =
                 avion["true_track"] ?? 0;
 
+            
+            const altitude = avion["geo_altitude"];
+
+            let couleur;
+
+            if (avion["on_ground"] === true) {
+
+                couleur = "black";
+
+            } else if (altitude == null) {
+
+                couleur = "black";
+
+            } else {
+
+                couleur = couleurSelonAltitude(altitude);
+
+            }
+
 
             // Création de l'icône
 
@@ -637,13 +690,13 @@
                 className: "avion-icon",
 
                 html: `
-                    <img
-                        src="/static/Avion.png"
+                    <div
+                        class="avion-image"
                         style="
-                            transform:
-                                rotate(${orientation}deg);
+                            background-color: ${couleur};
+                            transform: rotate(${orientation}deg);
                         "
-                    >
+                    ></div>
                 `,
 
                 iconSize: [40, 40],
@@ -651,6 +704,7 @@
                 iconAnchor: [20, 20]
 
             });
+
 
 
             // Création du marqueur
@@ -715,6 +769,8 @@
     // ======================================================
     // AFFICHER LA LISTE DES AVIONS
     // ======================================================
+    
+
 
     function afficherListeAvions(avions) {
 
