@@ -306,6 +306,145 @@
             transform-origin: center center;
         }
 
+        /* =========================================================
+        ÉCHELLE D'ALTITUDE
+        ========================================================= */
+
+        .altitude-legend {
+
+            background: rgba(31, 41, 55, 0.92);
+
+            padding: 5px 10px 5px 10px;
+
+            border-radius: 6px;
+
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.35);
+
+            color: white;
+
+            font-family: Arial, sans-serif;
+
+            width: 800px;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+        BARRE DE COULEUR
+        ========================================================= */
+
+        .altitude-gradient {
+
+            position: relative;
+
+            width: 100%;
+            height: 10px;
+
+            border: 2px solid #111;
+
+            background: linear-gradient(
+                to right,
+
+                rgb(244, 91, 10) 0%,
+                rgb(244, 91, 10) 3.5%,
+
+                rgb(244, 127, 10) 7%,
+
+                rgb(249, 185, 26) 14%,
+
+                rgb(242, 214, 0) 21.5%,
+
+                rgb(169, 208, 0) 28.5%,
+
+                rgb(43, 197, 27) 35.5%,
+
+                rgb(20, 187, 154) 42.5%,
+
+                rgb(28, 188, 210) 57.5%,
+
+                rgb(77, 71, 229) 78%,
+
+                rgb(224, 0, 207) 100%
+            );
+        }
+
+
+        /* =========================================================
+        TRAITS VERTICAUX
+        ========================================================= */
+
+        .altitude-tick {
+
+            position: absolute;
+
+            top: 0;
+
+            width: 2px;
+            height: 100%;
+
+            background: #111;
+
+            transform: translateX(-50%);
+        }
+
+
+        /* =========================================================
+        VALEURS
+        ========================================================= */
+
+        .altitude-labels {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 10px;
+
+            margin-top: 8px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            color: white;
+
+            white-space: nowrap;
+        }
+
+
+        .altitude-label {
+
+            position: absolute;
+
+            top: 0;
+
+            transform: translateX(-50%);
+
+            white-space: nowrap;
+        }
+
+
+        /* Première valeur */
+
+        .altitude-label.first {
+
+            left: 0%;
+
+            transform: translateX(0);
+        }
+
+
+        /* Dernière valeur */
+
+        .altitude-label.last {
+
+            left: 100%;
+
+            transform: translateX(-100%);
+        }
+
 
     </style>
 
@@ -457,6 +596,182 @@
         8
     );
 
+    // ======================================================
+    // LÉGENDE D'ALTITUDE
+    // ======================================================
+
+    const altitudeLegend = L.control({
+        position: "bottomright"
+    });
+
+
+    altitudeLegend.onAdd = function(map) {
+
+        const div = L.DomUtil.create(
+            "div",
+            "altitude-legend"
+        );
+
+
+        div.innerHTML = `
+
+            <div class="altitude-gradient">
+
+                <span
+                    class="altitude-tick"
+                    style="left: 0%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 3.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 7%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 14%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 21.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 28.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 35.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 42.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 57.5%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 78%;"
+                ></span>
+
+                <span
+                    class="altitude-tick"
+                    style="left: 100%;"
+                ></span>
+
+            </div>
+
+
+            <div class="altitude-labels">
+
+                <span
+                    class="altitude-label first"
+                    style="left: 0%;"
+                >
+                    0
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 3.5%;"
+                >
+                    500
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 7%;"
+                >
+                    1 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 14%;"
+                >
+                    2 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 21.5%;"
+                >
+                    4 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 28.5%;"
+                >
+                    6 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 35.5%;"
+                >
+                    8 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 42.5%;"
+                >
+                    10 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 57.5%;"
+                >
+                    20 000
+                </span>
+
+                <span
+                    class="altitude-label"
+                    style="left: 78%;"
+                >
+                    30 000
+                </span>
+
+                <span
+                    class="altitude-label last"
+                >
+                    40 000+
+                </span>
+
+            </div>
+        `;
+
+
+
+
+        // Empêche les clics sur la légende
+        // de déplacer la carte
+
+        L.DomEvent.disableClickPropagation(div);
+
+
+        return div;
+    };
+
+
+    altitudeLegend.addTo(map);
+
+
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -601,34 +916,97 @@
 
     }
 
+    // ======================================================
+    // COULEUR SELON L'ALTITUDE
+    // ======================================================
+
+    const altitudeColors = [
+
+        { altitude: 0,     color: [244, 91, 10] },    // orange/rouge
+        { altitude: 500,   color: [244, 91, 10] },
+        { altitude: 1000,  color: [244, 127, 10] },
+        { altitude: 2000,  color: [249, 185, 26] },
+        { altitude: 4000,  color: [242, 214, 0] },
+        { altitude: 6000,  color: [169, 208, 0] },
+        { altitude: 8000,  color: [43, 197, 27] },
+        { altitude: 10000, color: [20, 187, 154] },
+        { altitude: 20000, color: [28, 188, 210] },
+        { altitude: 30000, color: [77, 71, 229] },
+        { altitude: 40000, color: [224, 0, 207] }
+
+    ];
+
+
+    function couleurSelonAltitude(altitude) {
+
+        // Au-dessus de 40 000 m
+        if (altitude >= 40000) {
+
+            const c = altitudeColors[altitudeColors.length - 1].color;
+
+            return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+        }
+
+
+        // En dessous de 0 m
+        if (altitude <= 0) {
+
+            const c = altitudeColors[0].color;
+
+            return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+        }
+
+
+        // Recherche des deux couleurs entre lesquelles
+        // l'altitude se trouve
+
+        for (let i = 0; i < altitudeColors.length - 1; i++) {
+
+            const min = altitudeColors[i];
+            const max = altitudeColors[i + 1];
+
+
+            if (
+                altitude >= min.altitude &&
+                altitude <= max.altitude
+            ) {
+
+                // Position entre les deux paliers
+                const ratio =
+                    (altitude - min.altitude) /
+                    (max.altitude - min.altitude);
+
+
+                // Interpolation RGB
+
+                const r = Math.round(
+                    min.color[0] +
+                    (max.color[0] - min.color[0]) * ratio
+                );
+
+                const g = Math.round(
+                    min.color[1] +
+                    (max.color[1] - min.color[1]) * ratio
+                );
+
+                const b = Math.round(
+                    min.color[2] +
+                    (max.color[2] - min.color[2]) * ratio
+                );
+
+
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+        }
+
+
+        return "black";
+    }
 
 
     // ======================================================
     // AFFICHER LES AVIONS SUR LA CARTE
     // ======================================================
-
-    function couleurSelonAltitude(altitude) {
-
-        const altitudeMin = 0;
-        const altitudeMax = 12000;
-
-        // Limite l'altitude entre 0 et 12000 m
-        const altitudeLimitee = Math.max(
-            altitudeMin,
-            Math.min(altitudeMax, altitude)
-        );
-
-        // Valeur entre 0 et 1
-        const ratio =
-            (altitudeLimitee - altitudeMin) /
-            (altitudeMax - altitudeMin);
-
-        // Rouge → Bleu
-        const rouge = Math.round(255 * (1 - ratio));
-        const bleu = Math.round(255 * ratio);
-
-        return `rgb(${rouge}, 0, ${bleu})`;
-    }
 
     function afficherAvionsCarte(avions) {
 
