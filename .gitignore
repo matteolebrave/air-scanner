@@ -19,5 +19,9 @@
 !templates/**
 !static/**
 
+# Ignore Logic/__pycache__
+Logic/__pycache__/
+
+
 # Keep main.py
 !main.py
