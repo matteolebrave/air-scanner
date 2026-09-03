@@ -7,17 +7,23 @@
 # Keep README.md itself
 !README.md
 
+# Keep json for tests
+!package.json
+!package-lock.json
+
 # Keep directories
 !Logic/
 !Map/
 !templates/
 !static/
+!Tests/
 
 # Keep everything inside them
 !Logic/**
 !Map/**
 !templates/**
 !static/**
+!Tests/**
 
 # Ignore Logic/__pycache__
 Logic/__pycache__/

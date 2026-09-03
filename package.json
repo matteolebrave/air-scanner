@@ -1,0 +1,25 @@
+{
+  "name": "air-scanner",
+  "version": "1.0.0",
+  "description": "Application web permettant de rechercher les aéronefs présents dans une zone géographique à partir de coordonnées GPS et d'un rayon.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --env=jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matteolebrave/air-scanner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/matteolebrave/air-scanner/issues"
+  },
+  "homepage": "https://github.com/matteolebrave/air-scanner#readme",
+  "devDependencies": {
+    "jest": "^30.5.1",
+    "jest-environment-jsdom": "^30.5.1"
+  }
+}
